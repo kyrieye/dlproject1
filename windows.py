@@ -18,7 +18,20 @@ window.tk_focusFollowsMouse()
 window.bind("<Escape>", lambda event: window.iconify())
 frame0 = tk.Frame(window, pady=10, padx=15)
 frame0.grid(row=0, column=0, sticky='w')
+
+
 # 全选反选
+def unselectall():
+    for index, item in enumerate(countrylist):
+        v[index].set('')
+
+
+# 全选
+def selectall():
+    for index, item in enumerate(countrylist):
+        v[index].set(item)
+
+
 frame1 = tk.Frame(window, pady=6, padx=15)
 frame1.grid(row=1, column=0)
 opt = tk.IntVar()
@@ -27,7 +40,8 @@ for index, item in enumerate(countrylist):
     v.append(tk.StringVar())
     ttk.Checkbutton(frame1, text=item, variable=v[-1], onvalue=item, offvalue="").grid(row=index // 7 + 1,
                                                                                        column=index % 7, sticky='w')
-
+ttk.Radiobutton(frame1, text='全选', variable=opt, value=1, command=selectall).grid(row=0, column=0, sticky='w')
+ttk.Radiobutton(frame1, text='反选', variable=opt, value=0, command=unselectall).grid(row=0, column=1, sticky='w')
 frame2 = tk.Frame(window, padx=15, pady=15)
 frame2.grid(row=2, column=0, sticky='w')
 var = tk.StringVar()
