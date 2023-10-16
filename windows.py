@@ -1,10 +1,15 @@
 from utils import *
+import matplotlib.pyplot as plt
+import tkinter as tk
+from tkinter import messagebox, ttk
+import datetime
 
 
 class Windows:
     def __init__(self):
         self.data_gdp, self.data_population = get_data()
-        self.countrylist = self.data_gdp['GDP, current prices (Billions of U.S. dollars)'][1:229].tolist()  # 国家列表
+        self.countrylist = self.data_gdp['GDP, current prices (Billions of U.S. dollars)'][
+                           1:229].tolist()  # get the country list
         self.indexmap = {'GDP': 'gdp', '人口': 'renkou'}
         self.indexlist = list(self.indexmap)
         self.window = None
@@ -13,6 +18,7 @@ class Windows:
         self.start_year = None
         self.end_year = None
 
+    # initialization window
     def build_windows(self):
         plt.rcParams['font.sans-serif'] = ['SimHei']
         self.window = tk.Tk()
@@ -29,15 +35,18 @@ class Windows:
         frame1 = tk.Frame(self.window, pady=6, padx=15)
         frame1.grid(row=1, column=0)
         opt = tk.IntVar()
+        # Add button to select country
         for index, item in enumerate(self.countrylist):
             self.v.append(tk.StringVar())
             ttk.Checkbutton(frame1, text=item, variable=self.v[-1], onvalue=item, offvalue="").grid(row=index // 7 + 1,
                                                                                                     column=index % 7,
                                                                                                     sticky='w')
+        # Added select all and inverse select buttons
         ttk.Radiobutton(frame1, text='全选', variable=opt, value=1, command=self.selectall).grid(row=0, column=0,
                                                                                                  sticky='w')
         ttk.Radiobutton(frame1, text='反选', variable=opt, value=0, command=self.unselectall).grid(row=0, column=1,
                                                                                                    sticky='w')
+        # Select indicator button(population or GDP)
         frame2 = tk.Frame(self.window, padx=15, pady=15)
         frame2.grid(row=2, column=0, sticky='w')
         self.var = tk.StringVar()
@@ -46,6 +55,7 @@ class Windows:
         chosen.grid(row=0, column=1, sticky='w')
         chosen['values'] = self.indexlist
         chosen.current(0)
+        # Select year button
         self.start_year = tk.StringVar()
         self.end_year = tk.StringVar()
         self.start_year.set('1980')
